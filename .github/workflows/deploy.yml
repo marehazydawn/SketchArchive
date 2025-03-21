@@ -13,6 +13,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Generate Image Manifest
+        run: node generateManifest.js
+
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v3
         with:
