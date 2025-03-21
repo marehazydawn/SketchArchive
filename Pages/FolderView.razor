@@ -1,0 +1,39 @@
+@page "/folder/{FolderName}"
+@inject SketchService SketchService
+@inject NavigationManager NavigationManager
+
+<h1>@FolderName Sketches</h1>
+
+@if (currentFolder == null)
+{
+    <p>Loading sketches...</p>
+}
+else if (currentFolder.Images == null || !currentFolder.Images.Any())
+{
+    <p>No sketches found in this folder.</p>
+}   
+else
+{
+    <div>
+        @foreach (var image in currentFolder.Images)
+        {
+            <img src="@($"sketches/{currentFolder.Folder}/{image}")" alt="@image" width="200" style="margin:10px;" />
+        }
+    </div>
+}
+
+@code {
+    [Parameter] public string FolderName { get; set; }
+    private SketchArchive.Models.SketchFolder currentFolder;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var folders = await SketchService.GetSketchFoldersAsync();
+        currentFolder = folders.FirstOrDefault(f => f.Folder.Equals(FolderName, StringComparison.OrdinalIgnoreCase));
+        if (currentFolder == null)
+        {
+            // Optionally, redirect to home if the folder is not found.
+            NavigationManager.NavigateTo("/");
+        }
+    }
+}

@@ -1,0 +1,29 @@
+@page "/"
+@inject SketchService SketchService
+
+<h1>Sketch Archive</h1>
+
+@if (folders == null)
+{
+    <p>Loading folders...</p>
+}
+else
+{
+    <ul>
+        @foreach (var folder in folders)
+        {
+            <li>
+                <a href="@($"folder/{folder.Folder}")">@folder.Folder</a>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private List<SketchArchive.Models.SketchFolder> folders;
+
+    protected override async Task OnInitializedAsync()
+    {
+        folders = await SketchService.GetSketchFoldersAsync();
+    }
+}
