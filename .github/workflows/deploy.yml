@@ -3,7 +3,7 @@ name: Deploy Blazor WebAssembly to GitHub Pages
 on:
   push:
     branches:
-      - main  # Adjust if your default branch is different
+      - main
 
 jobs:
   deploy:
@@ -28,3 +28,5 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: release/wwwroot
           publish_branch: gh-pages
+          # Optional: clean the branch before deploying
+          clean: true
