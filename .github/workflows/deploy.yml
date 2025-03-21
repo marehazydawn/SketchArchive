@@ -3,7 +3,7 @@ name: Deploy Blazor WebAssembly to GitHub Pages
 on:
   push:
     branches:
-      - main
+      - main  # Adjust if your default branch is different
 
 jobs:
   deploy:
@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v3
@@ -22,11 +22,15 @@ jobs:
         run: dotnet publish SketchArchive.csproj -c Release -o release --nologo
         working-directory: .
 
+      - name: Debug Git Status
+        run: |
+            git status
+            git config --list
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: release/wwwroot
           publish_branch: gh-pages
-          # Optional: clean the branch before deploying
-          clean: true
+ 
