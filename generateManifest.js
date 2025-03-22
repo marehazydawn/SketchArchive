@@ -6,7 +6,7 @@ const sketchesFolder = path.join(__dirname, 'wwwroot', 'sketches');
 // Define where to output the manifest file
 const manifestFile = path.join(__dirname, 'wwwroot', 'sketches.json');
 
-// Recursively scan a folder and return an array of image objects
+// Recursively scan a folder and return an array of image objects with folder and fileName
 function scanFolder(folder, relativePath = '') {
   let images = [];
   const entries = fs.readdirSync(folder);
@@ -16,17 +16,15 @@ function scanFolder(folder, relativePath = '') {
     const stats = fs.statSync(fullPath);
 
     if (stats.isDirectory()) {
-      // Recurse into subdirectories
+      // Recurse into subdirectories; update the relative path accordingly
       images = images.concat(scanFolder(fullPath, path.join(relativePath, entry)));
     } else {
-      // Filter for common image file extensions (adjust if needed)
+      // Filter for common image file extensions
       const ext = path.extname(entry).toLowerCase();
       if (['.png', '.jpg', '.jpeg', '.gif', '.svg'].includes(ext)) {
         images.push({
           fileName: entry,
-          folder: relativePath || 'sketches',
-          // File path relative to wwwroot; adjust as needed
-          filePath: `/${relativePath ? relativePath + '/' : ''}${entry}`
+          folder: relativePath || 'sketches'
         });
       }
     }
@@ -34,8 +32,24 @@ function scanFolder(folder, relativePath = '') {
   return images;
 }
 
-// Generate the manifest
-const manifest = scanFolder(sketchesFolder);
+// Scan the sketches folder
+const images = scanFolder(sketchesFolder);
+
+// Group images by their folder
+const grouped = images.reduce((acc, curr) => {
+  const folderName = curr.folder;
+  if (!acc[folderName]) {
+    acc[folderName] = [];
+  }
+  acc[folderName].push(curr.fileName);
+  return acc;
+}, {});
+
+// Convert the grouped object into an array in the desired format
+const manifest = Object.keys(grouped).map(folderName => ({
+  Folder: folderName,
+  Images: grouped[folderName]
+}));
 
 // Write the manifest file with pretty printing
 fs.writeFileSync(manifestFile, JSON.stringify(manifest, null, 2));
