@@ -1,22 +1,16 @@
 [
   {
-    "fileName": "1425234539240.jpg",
-    "folder": "folder1",
-    "filePath": "/folder1/1425234539240.jpg"
+    "Folder": "folder1",
+    "Images": [
+      "1425234539240.jpg",
+      "af6a21fb8f7a1.jpg"
+    ]
   },
   {
-    "fileName": "af6a21fb8f7a1.jpg",
-    "folder": "folder1",
-    "filePath": "/folder1/af6a21fb8f7a1.jpg"
-  },
-  {
-    "fileName": "1403552.png",
-    "folder": "folder2",
-    "filePath": "/folder2/1403552.png"
-  },
-  {
-    "fileName": "christmas.png",
-    "folder": "folder2",
-    "filePath": "/folder2/christmas.png"
+    "Folder": "folder2",
+    "Images": [
+      "1403552.png",
+      "christmas.png"
+    ]
   }
 ]
